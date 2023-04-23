@@ -1,0 +1,5 @@
+- name: Add ssh key for ansible-user # in case you need to update the ssh key
+  tags: key
+  ansible.posix.authorized_key:
+    user: ansible-user
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4FsVGULn8ElbObfSnc3Qpl1adB39DBqxnKpnAq5Stn ansible"

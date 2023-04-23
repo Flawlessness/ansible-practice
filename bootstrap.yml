@@ -1,0 +1,69 @@
+---
+
+- name: Update repository index
+  hosts: debian
+  become: yes
+  pre_tasks:
+
+    - name: Update repository index
+      tags: always
+      apt:
+        update_cache: yes
+
+- name: Install Docker
+  hosts: debian
+  become: yes
+  tasks:
+
+    - name: Install packages to allow apt to use a repository over HTTPS
+      tags: always
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg2
+          - software-properties-common
+
+    - name: Add Docker’s official GPG key
+      tags: always
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add the Docker repository
+      tags: always
+      apt_repository:
+        repo: "deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+
+    - name: Install Docker
+      tags: always
+      apt:
+        name: docker-ce
+        state: present
+
+- name: Add ansible-user
+  hosts: all
+  become: true
+  tasks:
+
+    - name: Create ansible-user
+      tags: always
+      user:
+        name: ansible-user
+        groups: root
+
+    - name: Add ssh key for ansible-user
+      tags: always
+      ansible.posix.authorized_key:
+        user: ansible-user
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIK4FsVGULn8ElbObfSnc3Qpl1adB39DBqxnKpnAq5Stn ansible"
+
+    - name: Add sudoers file for ansible-user
+      tags: always
+      copy:
+        src: sudoer_ansible
+        dest: /etc/sudoers.d/ansible-user
+        owner: root
+        group: root
+        mode: 0440
