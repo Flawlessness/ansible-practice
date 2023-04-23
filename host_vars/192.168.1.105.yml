@@ -1,0 +1,2 @@
+nginx_config_path:  /opt/nginx/nginx.conf
+nginx_path:  /opt/nginx

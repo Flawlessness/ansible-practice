@@ -1,3 +1,9 @@
+- name: Create directory if it doesn't exist
+  tags: copy
+  file:
+    path: "{{ nginx_path }}"
+    state: directory
+
 - name: Copy nginx.conf
   tags: copy
   copy:
