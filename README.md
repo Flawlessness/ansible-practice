@@ -1,2 +1,2 @@
 # ansible-practice
-Different tasks on ansible
+Deployed a microservice in a container on a virtual machine using a configuration management system.
